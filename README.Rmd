@@ -1,0 +1,78 @@
+---
+title: "Samantha Remotigue PS07"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Welcome to Samantha's Coverpage
+
+--------------
+
+## During the fall semester, we made many different kinds of plots. 
+
+
+```{r}
+library(dplyr)
+library(ggplot2)
+```
+
+## In practicing methods of making our own datasets and using ggplot, we began with simple barplots.
+
+```{r}
+fruits <- tibble(
+  fruit=c("apple", "apple", "orange", "apple", "orange")
+)
+fruits_counted <- tibble(
+  fruit= c("apple","orange"),
+  number=c(3,2)
+)
+```
+
+```{r}
+ggplot(data=fruits_counted, mapping= aes(x=fruit, y=number))+ geom_col()
+```
+
+
+
+
+## *More advanced visualizations*
+
+_Two months later, we worked with map visualizations and cvs files, as well as used ggplot2 to enhance our plots._
+
+
+```{r}
+library(tidyverse)
+library(sf)
+library(maps)
+library(USAboundaries)
+library(readr)
+library(dplyr)
+library(tmaptools)
+```
+
+** Washington Plot**
+```{r}
+WA_cities <- tibble(
+  name=c("Seattle", "Olympia","Spokane"),
+  lat=c(47.6062,47.0379,47.6588),
+  lon=c(-122.3321,-122.9007,-117.4260)
+)
+WA_cities_sf<- WA_cities %>% 
+  st_as_sf(coords=c("lon","lat"),crs=4326)
+
+USA_map <-  maps::map("state", plot = FALSE, fill = TRUE)
+USA_sf <- USA_map %>% 
+  st_as_sf(crs = 4326)
+
+WA_sf<- USA_sf %>% 
+  filter(ID=="washington")
+
+ggplot()+
+  geom_sf(data=WA_sf)+
+  geom_sf(data=WA_cities_sf, aes(col=name), size=3)
+
+
+```
